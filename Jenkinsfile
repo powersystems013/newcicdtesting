@@ -37,10 +37,21 @@ pipeline {
     }
 
     stage('Stop and Remove Container') {
-      steps {
-        script {
-          sh "docker stop ${containerName} || true"
-          sh "docker rm ${containerName} || true"
+      parallel {
+        stage('Stop and Remove Container') {
+          steps {
+            script {
+              sh "docker stop ${containerName} || true"
+              sh "docker rm ${containerName} || true"
+            }
+
+          }
+        }
+
+        stage('Permission') {
+          steps {
+            echo 'echo " Permission is granted"'
+          }
         }
 
       }
